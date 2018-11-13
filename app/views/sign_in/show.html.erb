@@ -4,12 +4,22 @@
   <title>ExampleGoogleSigninWithRails</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 
 <body>
-Hello
+<div>
+  ↓↓↓ Google Login Button
+</div>
+<div>
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+</div>
+<div>
+  ↑↑↑ Google Login Button
+</div>
 </body>
 </html>
