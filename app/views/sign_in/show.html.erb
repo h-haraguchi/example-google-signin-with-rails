@@ -4,7 +4,7 @@
   <title>ExampleGoogleSigninWithRails</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="<%= google_signin_client_id %>">
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
