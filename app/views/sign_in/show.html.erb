@@ -19,11 +19,12 @@
   <a href="javascript:signOut()">ログアウト</a>
 </div>
 <script>
+  //noinspection JSUnusedLocalSymbols called by google api
   function onSignIn(googleUser) {
     //console.log(googleUser.getBasicProfile());
     //console.log(googleUser.getAuthResponse());
-    var id_token = googleUser.getAuthResponse().id_token;
-    var xhr = new XMLHttpRequest();
+    const id_token = googleUser.getAuthResponse().id_token;
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:3000/tokensignin');
     let crsfToken = document.querySelector('head>meta[name=csrf-token]').getAttribute('content');
     xhr.setRequestHeader('X-CSRF-Token', crsfToken);
@@ -31,14 +32,16 @@
     xhr.onload = function() {
       console.log('Signed in as: ' + xhr.responseText);
     };
-    xhr.send('idtoken=' + id_token);
+    xhr.send('id_token=' + id_token);
   }
+  //noinspection JSUnusedLocalSymbols called by google api
   function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
+    const auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
   }
+  //noinspection JSUnusedLocalSymbols called by google api
   function init() {
     const googleSignInButton = document.querySelector(".google-signin-button");
     const signOutButton = document.querySelector(".signout-button");
