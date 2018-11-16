@@ -8,29 +8,25 @@
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 </head>
 
 <body>
-<div>
-  ↓↓↓ Google Login Button
-</div>
-<div>
+<div class="google-signin-button" style="display: none;">
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
 </div>
-<div>
-  ↑↑↑ Google Login Button
+<div class="signout-button" style="display: none;">
+  <a href="javascript:signOut()">ログアウト</a>
 </div>
 <script>
   function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
+    //console.log(googleUser.getBasicProfile());
+    //console.log(googleUser.getAuthResponse());
+    var id_token = googleUser.getAuthResponse().id_token;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://localhost:3000/tokensignin');
+    xhr.open('POST', 'http://localhost:3000/tokensignin');
+    let crsfToken = document.querySelector('head>meta[name=csrf-token]').getAttribute('content');
+    xhr.setRequestHeader('X-CSRF-Token', crsfToken);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
       console.log('Signed in as: ' + xhr.responseText);
@@ -42,6 +38,22 @@
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
+  }
+  function init() {
+    const googleSignInButton = document.querySelector(".google-signin-button");
+    const signOutButton = document.querySelector(".signout-button");
+
+    gapi.load('auth2', function() {
+      toggleSignInOut(gapi.auth2.getAuthInstance().isSignedIn.get());
+      gapi.auth2.getAuthInstance().isSignedIn.listen(function (isSignedIn) {
+        toggleSignInOut(isSignedIn)
+      })
+    });
+
+    function toggleSignInOut(isSignedIn) {
+      googleSignInButton.style.display = isSignedIn ? 'none' : '';
+      signOutButton.style.display = isSignedIn ? '' : 'none';
+    }
   }
 </script>
 </body>
